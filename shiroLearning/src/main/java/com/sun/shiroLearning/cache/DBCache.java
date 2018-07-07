@@ -21,9 +21,9 @@ public class DBCache {
 	
 	//static{}(即static块)，会在类被加载的时候执行且仅会被执行一次，一般用来初始化静态变量和调用静态方法
 	static {
-		USER_CACHE.put("name1", new UserInfo(1L, "gj", "123456", "admin", false));
-		USER_CACHE.put("name2", new UserInfo(1L, "hr", "123456", "manager", false));
-		USER_CACHE.put("name3", new UserInfo(1L, "yg", "123456", "noraml", false));
+		USER_CACHE.put("gj", new UserInfo(1L, "gj", "123456", "admin", false));
+		USER_CACHE.put("hr", new UserInfo(1L, "hr", "123456", "manager", false));
+		USER_CACHE.put("yg", new UserInfo(1L, "yg", "123456", "noraml", false));
 		
 		//Arrays.asList()把数组转换成集合,转换后的集合无add/remove/clear方法
 		PERMISSON_CACHE.put("admin", Arrays.asList("userInfo:list","userInfo:add","userInfo:edit"));
