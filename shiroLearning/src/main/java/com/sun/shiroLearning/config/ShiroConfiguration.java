@@ -3,7 +3,7 @@ package com.sun.shiroLearning.config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -21,17 +21,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShiroConfiguration {
 
-	@Bean
-	public EhCacheManager getEhCacheManager(){
-		EhCacheManager cacheManager = new EhCacheManager();
-		cacheManager.setCacheManagerConfigFile("classpath:ehcache-shiro.xml");
-		return cacheManager;
-	}
 	
 	@Bean(name="lifecycleBeanPostProcessor")
 	public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor(){
 		return new LifecycleBeanPostProcessor();
 	}
+	
+    @Bean  
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){  
+       HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();  
+       hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;  
+       hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));  
+       return hashedCredentialsMatcher;  
+    }  
 	
 	@Bean
 	public DefaultAdvisorAutoProxyCreator getAdvisorAutoProxyCreator(){
@@ -41,7 +43,7 @@ public class ShiroConfiguration {
 	}
 	
 	@Bean(name="authRealm")
-	public AuthRealm authRealm(EhCacheManager cacheManager){
+	public AuthRealm authRealm(){
 		AuthRealm authRealm = new AuthRealm();
 		return authRealm;
 	}
@@ -50,7 +52,7 @@ public class ShiroConfiguration {
 	public DefaultWebSecurityManager getDefaultWebSecurityManager(AuthRealm authRealm){
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(authRealm);
-		securityManager.setCacheManager(getEhCacheManager());
+		//securityManager.setCacheManager(getEhCacheManager());
 		return securityManager;
 	}
 	
@@ -91,6 +93,7 @@ public class ShiroConfiguration {
         // TODO 重中之重啊，过滤顺序一定要根据自己需要排序
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 需要验证的写 authc 不需要的写 anon
+        filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/resource/**", "anon");
         filterChainDefinitionMap.put("/install", "anon");
         filterChainDefinitionMap.put("/hello", "anon");

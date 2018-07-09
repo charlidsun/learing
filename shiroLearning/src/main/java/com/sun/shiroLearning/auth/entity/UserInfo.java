@@ -1,70 +1,92 @@
- package com.sun.shiroLearning.auth.entity;
+package com.sun.shiroLearning.auth.entity;
+
+import java.io.Serializable;
+import java.util.List;
+
 /**
- * 功能：
- * 说明：
+ * 功能： 说明：
+ * 
  * @author 孙荆阁:
- * @Date 2018年7月6日 上午10:30:01
+ * @Date 2018年6月30日 上午11:10:03
  */
-public class UserInfo {
+public class UserInfo implements Serializable {
 
-    private Long id;
-    private String username;
-    private String password;
-    private String roleName;
-    private boolean locked;
-    
-    
-	public UserInfo() {
-	}
-	
-	public UserInfo(Long id, String username, String password, String roleName,
-			boolean locked) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.roleName = roleName;
-		this.locked = locked;
+	private static final long serialVersionUID = 1L;
+	private int uid;
+	private String username;
+	private String name;
+	private String password;
+	private String salt;
+	private byte state;
+	// 角色
+	private List<SysRole> userRole;
+
+	public int getUid() {
+		return uid;
 	}
 
-	public Long getId() {
-		return id;
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String getRoleName() {
-		return roleName;
+
+	public String getSalt() {
+		return salt;
 	}
-	
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
-	
-	public boolean isLocked() {
-		return locked;
+
+	public byte getState() {
+		return state;
 	}
-	
-	public void setLocked(boolean locked) {
-		this.locked = locked;
+
+	public String getCredentialsSalt() {
+		return this.username + this.salt;
 	}
-    
-    
+
+	public void setState(byte state) {
+		this.state = state;
+	}
+
+	public List<SysRole> getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(List<SysRole> userRole) {
+		this.userRole = userRole;
+	}
+
+
+	@Override
+	public String toString() {
+		return "UserInfo [uid=" + uid + ", username=" + username + ", name="
+				+ name + ", password=" + password + ", salt=" + salt
+				+ ", state=" + state + "]";
+	}
+
 }

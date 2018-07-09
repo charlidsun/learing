@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title> wwww here</title>
+<link rel="stylesheet" type="text/css" href="/easy/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/easy/themes/icon.css">
+<script type="text/javascript" src="/easy/jquery.min.js"></script>
+<script type="text/javascript" src="/easy/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/easy/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body style="width: 99%;height: 97%;overflow:hidden;">
+	<!-- 表格 -->
+	<table id="dg" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" url="/users/sysRole" fit="true" toolbar="#tb">
+		<thead>
+        	<tr>
+        		<th field="role" width="100" align="center">角色</th>
+        		<th field="description" width="100" align="center">描述</th>
+        		<th field="available" width="200" align="center">状态</th>
+        	</tr>
+        </thead>
+	</table>
+	<!-- toolbar搜索 -->
+	<div id="tb" style="padding:5px;height:auto">
+		<div style="margin-bottom:5px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="openRole(0)">新增</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="openLinkModifyDialog()">编辑</a>
+		</div>
+		<div>
+			<input style="width:80px">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+		</div>
+	</div>
+	<!-- 弹出框，编辑和新增 -->
+	<div id="dlg" class="easyui-dialog" buttons="#dlg-buttons" data-options="closed:true,iconCls:'icon-save'" style="width:400px;height:300px;padding:10px">
+		<form id="fm" method="post">
+	    	<table cellpadding="7">
+	    		<tr>
+	    			<td>角色编码:</td>
+	    			<td>
+	    				<input type="text" name="id" value="" style="display: none"></input>
+	    				<input class="easyui-textbox" type="text" name="role" data-options="required:true"></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>角色名称:</td>
+	    			<td><input class="easyui-textbox" type="text" name="description" data-options="required:true"></input></td>
+	    		</tr>
+	    		<tr>
+	    			<td>角色名描述:</td>
+	    			<td><input class="easyui-textbox" type="text" name="available" data-options="required:true"></input></td>
+	    		</tr>
+	    	</table>
+		</form>
+		<div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" onclick="formSubmit();">保存</a> 
+        <a href="#" class="easyui-linkbutton" onclick="closeDialog();">关闭</a>
+    </div>
+	</div>
+	<script>
+		function openRole(){
+			$("#dlg").dialog("open").dialog("setTitle", "新增用户信息");
+			$('#dlg').dialog('open')
+		}
+		
+		function closeDialog(){
+			$('#dlg').dialog('close')
+		}
+		
+		function openLinkModifyDialog() {
+		    var selectedRows = $("#dg").datagrid("getSelections");
+		    if(selectedRows.length != 1) {
+		        $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+		        return;
+		    }
+		    $('#availableDiv').show();
+		    var row = selectedRows[0];
+		    debugger
+		    $("#fm").form("load", row);
+		    $("#dlg").dialog("open").dialog("setTitle", "编辑用户信息");
+		    url = "/user/save?id=" + row.id;
+		}
+		
+		function formSubmit(){
+			$('#fm').form('submit', {
+				url: '/users/saveOrUpdateRole',
+				method:'post',
+				success: function(res){
+					console.log(res);
+					$.messager.progress('close')
+	              	closeDialog();
+					$.messager.alert("系统提示", "保存成功！");
+					 $("#dg").datagrid("reload");
+				}
+			});
+		}
+	</script>
+</body>
+</html>
