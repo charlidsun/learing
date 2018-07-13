@@ -17,6 +17,7 @@ public class NettyLearningApplication implements CommandLineRunner{
 	@RequestMapping("/hello")
 	public String hello(){
 		return "index";
+		//return "chat/chat";
 	}
 
 	public static void main(String[] args) {

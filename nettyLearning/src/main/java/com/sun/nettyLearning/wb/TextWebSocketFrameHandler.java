@@ -1,10 +1,18 @@
 package com.sun.nettyLearning.wb;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.concurrent.GlobalEventExecutor;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.sun.nettyLearning.entity.TransMsg;
+import com.sun.nettyLearning.trans.JsonUtils;
 
 /**
  * 功能： 说明：
@@ -15,31 +23,25 @@ import java.time.LocalDateTime;
 public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-	// 读到客户端的内容并且向客户端去写内容
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx,
-			TextWebSocketFrame msg) throws Exception {
-		
-		System.out.println("收到消息：" + msg.text());
-
-		/**
-		 * writeAndFlush接收的参数类型是Object类型，但是一般我们都是要传入管道中传输数据的类型，比如我们当前的demo
-		 * 传输的就是TextWebSocketFrame类型的数据
-		 */
-		ctx.channel().writeAndFlush(
-				new TextWebSocketFrame("服务时间：" + LocalDateTime.now()));
-	}
+	private static ChannelGroup channelGroup = new DefaultChannelGroup(
+			GlobalEventExecutor.INSTANCE);
+	private Map<String, Object> userSet = new HashMap<String, Object>();
 
 	// 每个channel都有一个唯一的id值
 	@Override
 	public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-		// 打印出channel唯一值，asLongText方法是channel的id的全名
+		// 上线 asLongText方法是channel的id的全名
 		System.out.println("handlerAdded：" + ctx.channel().id().asLongText());
+		// 增加到ChannelGroup
+		channelGroup.add(ctx.channel());
 	}
 
 	@Override
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		// 下线
 		System.out.println("handlerRemoved：" + ctx.channel().id().asLongText());
+		// 移除到ChannelGroup
+		channelGroup.remove(ctx.channel());
 	}
 
 	@Override
@@ -49,6 +51,40 @@ public class TextWebSocketFrameHandler extends
 		ctx.close();
 	}
 
+	// 读到客户端的内容并且向客户端去写内容
+	@Override
+	protected void channelRead0(ChannelHandlerContext ctx,
+			TextWebSocketFrame msg) throws Exception {
+
+		System.out.println("收到消息：" + msg.text());
+		TransMsg t = transMsg(ctx.channel(),msg.text());
+
+		if (userSet.containsKey(t.getToUserId())){
+			Channel c = (Channel) userSet.get(t.getToUserId());
+			c.writeAndFlush(
+					new TextWebSocketFrame("返回消息" + msg.text()));
+		}
+		/**
+		 * writeAndFlush接收的参数类型是Object类型，但是一般我们都是要传入管道中传输数据的类型，比如我们当前的demo
+		 * 传输的就是TextWebSocketFrame类型的数据
+		 */
+		//ctx.channel().writeAndFlush(
+		//		new TextWebSocketFrame("返回消息" + msg.text()));
+	}
+	
+	
+	
+	public TransMsg transMsg(Channel c,String msg){
+		
+		TransMsg transMsg = JsonUtils.jsonToBean(msg, TransMsg.class);
+		
+		if (transMsg.getMgsType() == 1001){
+			userSet.put(c.id().asLongText(), c);
+		}
+		
+		return transMsg;
+	}
+	
 	
 
 }
