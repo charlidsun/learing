@@ -53,6 +53,12 @@ public class TransMsg {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+
 	
+	@Override
+	public String toString() {
+		return "TransMsg [mgsType=" + mgsType + ", userId=" + userId
+				+ ", toUserId=" + toUserId + ", msg=" + msg + "]";
+	}
 	
 }

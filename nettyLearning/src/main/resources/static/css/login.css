@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900');
+
+body{
+	background: #c1c1c0; 
+}
+
+h1{
+    font-size:30px;
+    margin-bottom:30px;
+    padding-left:50px;
+    font-family: 'Lato', sans-serif; 
+}
+
+.fa{
+    padding:30px 0px;
+}
+
+.login{
+    font-family: 'Lato', sans-serif;
+    margin-top: 300px
+}
+
+.login-box{
+    background:#FFF;
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    padding:30px;
+    border-radius:8px;
+    min-height:350px;
+}
+
+.form-control{
+    margin:20px 0px;
+}
+
+.buttons{
+    float:right;
+    margin:20px 0px;
+}

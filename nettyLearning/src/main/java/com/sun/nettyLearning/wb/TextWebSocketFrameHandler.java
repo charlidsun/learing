@@ -25,7 +25,7 @@ public class TextWebSocketFrameHandler extends
 
 	private static ChannelGroup channelGroup = new DefaultChannelGroup(
 			GlobalEventExecutor.INSTANCE);
-	private Map<String, Object> userSet = new HashMap<String, Object>();
+	private Map<String,Object> onLine = new HashMap<String, Object>();
 
 	// 每个channel都有一个唯一的id值
 	@Override
@@ -58,18 +58,28 @@ public class TextWebSocketFrameHandler extends
 
 		System.out.println("收到消息：" + msg.text());
 		TransMsg t = transMsg(ctx.channel(),msg.text());
-
-		if (userSet.containsKey(t.getToUserId())){
-			Channel c = (Channel) userSet.get(t.getToUserId());
-			c.writeAndFlush(
-					new TextWebSocketFrame("返回消息" + msg.text()));
+		System.out.println(t);
+		if (t.getMgsType() != 1001){
+			for(Channel channel:channelGroup){
+				System.out.println("---------------");
+				System.out.println(channel.id().asLongText());
+				System.out.println(t.getUserId());
+				System.out.println("\n");
+			    if(channel.id().asLongText().equals(t.getUserId())) {
+			    	   System.out.println("验证正确");
+			           channel.writeAndFlush(new TextWebSocketFrame("发送消息-》"+t.getMsg()));
+			    }
+			}
+		}else{
+			/**
+			 * writeAndFlush接收的参数类型是Object类型，但是一般我们都是要传入管道中传输数据的类型，比如我们当前的demo
+			 * 传输的就是TextWebSocketFrame类型的数据
+			 */
+			ctx.channel().writeAndFlush(
+					new TextWebSocketFrame("上线成功！@"+t.getUserId()));
 		}
-		/**
-		 * writeAndFlush接收的参数类型是Object类型，但是一般我们都是要传入管道中传输数据的类型，比如我们当前的demo
-		 * 传输的就是TextWebSocketFrame类型的数据
-		 */
-		//ctx.channel().writeAndFlush(
-		//		new TextWebSocketFrame("返回消息" + msg.text()));
+		
+		
 	}
 	
 	
@@ -79,7 +89,8 @@ public class TextWebSocketFrameHandler extends
 		TransMsg transMsg = JsonUtils.jsonToBean(msg, TransMsg.class);
 		
 		if (transMsg.getMgsType() == 1001){
-			userSet.put(c.id().asLongText(), c);
+			transMsg.setUserId(c.id().asLongText());
+			onLine.put(c.id().asLongText(), transMsg.getToUserId());
 		}
 		
 		return transMsg;
