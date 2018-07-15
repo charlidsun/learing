@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import com.sun.nettyLearning.chat.entity.ChatHistory;
+import com.sun.nettyLearning.chat.service.ChatService;
 import com.sun.nettyLearning.config.SpringUtil;
 import com.sun.nettyLearning.entity.TransMsg;
 import com.sun.nettyLearning.trans.JsonUtils;
@@ -31,6 +33,7 @@ import net.sf.json.JSONObject;
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
 	UserInfoService userInfoService = SpringUtil.getBean(UserInfoService.class);
+	ChatService chatService = SpringUtil.getBean(ChatService.class);
 
 	private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	private static Map<String, Object> onLine = new HashMap<String, Object>();
@@ -99,9 +102,16 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			}
 			
 		} else if(t.getMgsType() == 1003){
+			System.out.println("1003...返回聊天记录");
 			//接受ID发送
-			
-			
+			List<ChatHistory> chatList = chatService.getListChatHistory(t.getUserId(), t.getToUserId());
+			//将查出来的的聊天记录返回给点击的那个用户
+			Map<String,Object> otherMap = new HashMap<>();
+			otherMap.put("msgType", 1003);
+			otherMap.put("chatHistory", chatList);
+			JSONObject jsons = JSONObject.fromObject(otherMap);
+			System.out.println(jsons.toString());
+			ctx.channel().writeAndFlush(new TextWebSocketFrame(jsons.toString()));
 			
 		}else {
 			/**

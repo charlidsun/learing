@@ -22,13 +22,10 @@ if(window.WebSocket){
     socket.onmessage = function (event) {
         //连接协议，参数1001，初始化，返回信息
         var user = JSON.parse(event.data);
-        console.log(user.msgType);
         if (user.msgType == 1001){
-        	console.log(user);
         	//用户名
         	$('#profile-img').attr('src',user.user.headImg);
         	$('#profile-name').text(user.user.userName);
-        	console.log(user.userList);
         	//上线的人
         	if (user.userList != null && user.userList.length>0){
         		for (var i=0;i<user.userList.length;i++){
@@ -62,6 +59,29 @@ if(window.WebSocket){
 		 			 + '</li>'	
 		 	$('#onLineList').append(listHtml);
         }
+        //展示聊天记录
+        console.log("---")
+        console.log(user);
+        if (user.msgType == 1003){
+        	//将之前的列表清空
+        	$('#chatHistory').empty();
+        	for (var i=user.chatHistory.length-1;i>=0;i--){
+        		var chat = user.chatHistory[i];
+        		if (chat.sendUserId != userId){
+        			var ht = '<li class="sent">'
+        					+'<img src="'+chat.sendUserImg+'" alt="" />'
+        					+ '<p>'+chat.content+'</p>'
+        					+ '</li>'
+        					$('#chatHistory').append(ht);
+        		}else{
+        			var dt = '<li class="replies">'
+        				+'<img src="'+chat.sendUserImg+'" alt="" />'
+        				+	'<p>'+chat.content+'.</p>'
+        				+'</li>'
+        				$('#chatHistory').append(dt);
+        		}
+        	}
+        } 
     }
     //连接建立的回调函数
     socket.onopen = function(event){
@@ -108,16 +128,16 @@ function chatUser(obj){
 		$('#chatUserName').text(userName);
 		$('#chatHeadImg').attr('src',headImg);
 		
-//		//将这个人ID发送给后台
-//		//连接协议，参数1003，只携带用户ID过去，返回用户的channelID，用户信息，上线人的基本信息
-//		var msg = {
-//	    	mgsType:1003,
-//	    	userId:userId,
-//	    	toUserId:loginName,
-//	    	msg:''
-//	    }
-//		var message=JSON.stringify(msg);//将表单中的数据转成json
-//		send(message);
+		//将这个人ID发送给后台
+		//连接协议，参数1003，只携带用户ID过去，返回用户的channelID，用户信息，上线人的基本信息
+		var msg = {
+	    	mgsType:1003,
+	    	userId:userId,
+	    	toUserId:loginName,
+	    	msg:''
+	    }
+		var message=JSON.stringify(msg);//将表单中的数据转成json
+		send(message);
 	}else{
 		
 	}
@@ -160,12 +180,17 @@ $("#status-options ul li").click(function() {
 	$("#status-options").removeClass("active");
 });
 
+//发送新的消息
 function newMessage() {
 	message = $(".message-input input").val();
 	if($.trim(message) == '') {
 		return false;
 	}
-	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+	
+	//发起请求，1004
+	
+	
+	$('<li class="replies"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
 	$('.message-input input').val(null);
 	$('.contact.active .preview').html('<span>You: </span>' + message);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");

@@ -39,7 +39,6 @@ public class UserInfoService {
 			return null;
 		}
 		String sql = "select login.id,login.loginName,loginPwd,login.salt,login.lock,detail.userName,detail.phone,detail.gender,detail.headImg,detail.selfIntr from userlogin login LEFT JOIN userdetails detail on login.id = detail.id where login.loginName in ("+name+")";
-		System.out.println(sql);
 		List<Map<String,Object>> userMap = dbDao.queryListMap(sql);
 		List<UserInfo> userInfo = null;
 		try {
