@@ -1,3 +1,131 @@
+
+var socket;
+var userId = '';
+var wbUrl = 'ws://127.0.0.1:9091/ws';
+
+$(function(){
+	//首先隐藏聊天的区域
+	//$('#frame').hide();
+	//获取到页面上的ID
+	userId = $('#userId').text();
+	//$('#loading')
+	console.log(userId);
+})	
+
+
+//websocker
+//如果浏览器支持WebSocket
+if(window.WebSocket){
+	//参数就是与服务器连接的地址
+    socket = new WebSocket(wbUrl);
+    //客户端收到服务器消息的时候就会执行这个回调方法
+    socket.onmessage = function (event) {
+        //连接协议，参数1001，初始化，返回信息
+        var user = JSON.parse(event.data);
+        console.log(user.msgType);
+        if (user.msgType == 1001){
+        	console.log(user);
+        	//用户名
+        	$('#profile-img').attr('src',user.user.headImg);
+        	$('#profile-name').text(user.user.userName);
+        	console.log(user.userList);
+        	//上线的人
+        	if (user.userList != null && user.userList.length>0){
+        		for (var i=0;i<user.userList.length;i++){
+        			var lineUser = user.userList[i];
+        			var listHtml = '<li class="contact" data-id="'+lineUser.loginName+'" data-name="'+lineUser.userName+'" data-img="'+lineUser.headImg+'" onclick="chatUser(this)">'
+   					 			 + '	<div class="wrap">'
+   					 			 + '		<span class="contact-status online"></span>'
+   					 			 + '		<img src="'+lineUser.headImg+'" alt="" />'
+   					 			 + '		<div class="meta">'
+   					 			 + '			<p class="name">'+lineUser.userName+'</p>'
+   					 			 + '			<p class="preview">'+lineUser.selfIntr+'</p>'
+   					 			 + '		</div>'
+   					 			 + '	</div>'
+   					 			 + '</li>'	
+   					$('#onLineList').append(listHtml);
+        		}
+        	}
+        }
+        //其他人上线的通知
+        if (user.msgType == 1002){
+        	var lineUser = user.user;
+        	var listHtml = '<li class="contact" data-id="'+lineUser.loginName+'" data-name="'+lineUser.userName+'" data-img="'+lineUser.headImg+'" onclick="chatUser(this)">'
+		 			 + '	<div class="wrap">'
+		 			 + '		<span class="contact-status online"></span>'
+		 			 + '		<img src="'+lineUser.headImg+'" alt="" />'
+		 			 + '		<div class="meta">'
+		 			 + '			<p class="name">'+lineUser.userName+'</p>'
+		 			 + '			<p class="preview">'+lineUser.selfIntr+'</p>'
+		 			 + '		</div>'
+		 			 + '	</div>'
+		 			 + '</li>'	
+		 	$('#onLineList').append(listHtml);
+        }
+    }
+    //连接建立的回调函数
+    socket.onopen = function(event){
+    	console.log(event);
+    	//连接协议，参数1001，只携带用户ID过去，返回用户的channelID，用户信息，上线人的基本信息
+    	var msg = {
+        	mgsType:1001,
+        	userId:userId,
+        	toUserId:'',
+        	msg:''
+        }
+    	var message=JSON.stringify(msg);//将表单中的数据转成json
+    	send(message);
+    }
+    //连接断掉的回调函数
+    socket.onclose = function (event) {
+        var ta = document.getElementById("responseText");
+        ta.value = ta.value +"\n"+"连接关闭";
+    }
+}else{
+	alert("浏览器不支持WebSocket！");
+}
+
+//发送数据
+function send(message){
+    if(!window.WebSocket){
+        return;
+    }
+    //当websocket状态打开
+    if(socket.readyState == WebSocket.OPEN){
+        socket.send(message);
+    }else{
+        alert("连接没有开启");
+    }
+}
+
+//点击在线人员
+function chatUser(obj){
+	var loginName = $(obj).data("id");
+	var userName = $(obj).data("name");
+	var headImg = $(obj).data("img");
+	var chatUserName = $('#chatUserName').text();
+	if (chatUserName != loginName){
+		$('#chatUserName').text(userName);
+		$('#chatHeadImg').attr('src',headImg);
+		
+//		//将这个人ID发送给后台
+//		//连接协议，参数1003，只携带用户ID过去，返回用户的channelID，用户信息，上线人的基本信息
+//		var msg = {
+//	    	mgsType:1003,
+//	    	userId:userId,
+//	    	toUserId:loginName,
+//	    	msg:''
+//	    }
+//		var message=JSON.stringify(msg);//将表单中的数据转成json
+//		send(message);
+	}else{
+		
+	}
+	
+}
+
+
+
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
 $("#profile-img").click(function() {

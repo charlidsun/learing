@@ -13,6 +13,9 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sun.nettyLearning.user.entity.UserInfo;
+import com.sun.nettyLearning.user.service.UserInfoService;
+
 
 /**
  * 功能：
@@ -48,12 +51,12 @@ public class AuthRealm extends AuthorizingRealm{
 		//final Collection<String> permissions = permissionsCache.get(user
 		//		.getName());
 		//info.addStringPermissions(permissions);
-		for(SysRole role:user.getUserRole()){  
-			info.addRole(role.getRole());  
-	        for(SysPermission p:role.getUserPermission()){  
-	        	info.addStringPermission(p.getPermission());  
-	        }  
-	    }  
+//		for(SysRole role:user.getUserRole()){  
+//			info.addRole(role.getRole());  
+//	        for(SysPermission p:role.getUserPermission()){  
+//	        	info.addStringPermission(p.getPermission());  
+//	        }  
+//	    }  
 		return info;
 	}
 
@@ -78,22 +81,13 @@ public class AuthRealm extends AuthorizingRealm{
 		//UserInfo userInfo = Optional.ofNullable(
 		//		DBCache.USER_CACHE.get(userName)).orElseThrow(
 		//		UnknownAccountException::new);
-		UserInfo userInfo = userInfoService.queryUserInfoByName(userName);
-		System.err.println(userInfo.toString());
+		UserInfo userInfo = userInfoService.getUserInfo(userName);
 		// 有效还是无效的用户
-		if (userInfo.getState() == 1) {
+		if (userInfo.getLock() == 0) {
 			throw new LockedAccountException();
 		}
-		// 将查处来的结果认证
-		// 从数据库查询出来的账号名和密码,与用户输入的账号和密码对比
-		// 当用户执行登录时,在方法处理上要实现 user.login(token)
-		// 然后会自动进入这个类进行认证
-		// 交给 AuthenticatingRealm 使用 CredentialsMatcher 进行密码匹配，如果觉得人家的不好可以自定义实现
-		// 如果使用 HashedCredentialsMatcher 这里认证方式就要改一下 SimpleAuthenticationInfo
-		//SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userInfo, userInfo.getPassword(),
-		//ByteSource.Util.bytes(userInfo.getCredentialsSalt()), getName());
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-				userName, userInfo.getPassword(), getName());
+				userName, userInfo.getLoginPwd(), getName());
 		// 存放session
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("USER_SESSION", userInfo);

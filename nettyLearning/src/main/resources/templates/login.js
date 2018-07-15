@@ -12,9 +12,10 @@ function sysLogin(){
 		$.ajax({
 			url : '/login',
 			type : 'POST',
-			dataType : 'TEXT',
+			dataType : 'json',
 			data : {loginName:loginName,loginPwd:loginPwd},
 			success : function(result){
+				console.log(result);
 				if("success"==result){
 					console.log(result);
 					//访问跳转controller

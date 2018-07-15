@@ -1,5 +1,6 @@
 package com.sun.nettyLearning.dbDao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,9 @@ public class DbDao {
 	
 	public Map<String,Object> queryMap(String sql){
 		return jdbcTemplate.queryForMap(sql);
+	}
+	
+	public List<Map<String,Object>> queryListMap(String sql){
+		return jdbcTemplate.queryForList(sql);
 	}
 }

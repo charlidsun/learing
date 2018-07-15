@@ -77,7 +77,7 @@ public class ShiroConfiguration {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/index");
+        shiroFilterFactoryBean.setSuccessUrl("/chat/chat");
         shiroFilterFactoryBean.setUnauthorizedUrl("/denied");
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;
@@ -92,16 +92,13 @@ public class ShiroConfiguration {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 需要验证的写 authc 不需要的写 anon
         filterChainDefinitionMap.put("/favicon.ico", "anon");
-        filterChainDefinitionMap.put("/resource/**", "anon");
-        filterChainDefinitionMap.put("/install", "anon");
-        filterChainDefinitionMap.put("/hello", "anon");
+        filterChainDefinitionMap.put("/static", "anon");
+        filterChainDefinitionMap.put("/css", "anon");
+        filterChainDefinitionMap.put("/js", "anon");
+        filterChainDefinitionMap.put("/index", "authc");
         // anon：它对应的过滤器里面是空的,什么都没做
-
         // 不用注解也可以通过 API 方式加载权限规则
-        Map<String, String> permissions = new LinkedHashMap<>();
-        permissions.put("/users/find", "perms[user:find]");
-        filterChainDefinitionMap.putAll(permissions);
-        filterChainDefinitionMap.put("/**", "authc");
+        //filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 }
