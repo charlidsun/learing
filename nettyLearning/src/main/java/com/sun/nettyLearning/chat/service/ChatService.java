@@ -42,4 +42,10 @@ public class ChatService {
 		return chatList;
 	}
 	
+	public int saveChatHistory(Map<String,Object> chatMap) {
+		String sql = TransUtils.mapToInsertSql(chatMap, "chathistory");
+		System.out.println(sql);
+		return dbDao.exceSql(sql);
+	}
+	
 }

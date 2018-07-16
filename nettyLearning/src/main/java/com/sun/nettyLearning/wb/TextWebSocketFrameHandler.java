@@ -2,6 +2,7 @@ package com.sun.nettyLearning.wb;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -113,6 +114,33 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			System.out.println(jsons.toString());
 			ctx.channel().writeAndFlush(new TextWebSocketFrame(jsons.toString()));
 			
+		}else if(t.getMgsType() == 1004){
+			System.err.println(t.toString());
+			Map<String,Object> chatMap = new HashMap<>();
+			chatMap.put("sendUserId", t.getUserId());
+			chatMap.put("receiveUserId", t.getToUserId());
+			chatMap.put("content", t.getMsg());
+			chatMap.put("create_time", TransUtils.getToday());
+			int flag = chatService.saveChatHistory(chatMap);
+			if (flag > 0) {
+				//保存成功,发送给发送给他的人
+				Map<String,Object> otherMap = new HashMap<>();
+				otherMap.put("msgType", 1004);
+				UserInfo userInfo = userInfoService.getUserInfo(t.getUserId());
+				userInfo.setSelfIntr(t.getMsg());
+				otherMap.put("chatHistory", userInfo);
+				JSONObject jsons = JSONObject.fromObject(otherMap);
+				//告知她，你发消息
+				for (Channel channel : channelGroup) {
+					if (channel.id().asLongText().equals(onLine.get(t.getToUserId().toString()))) {
+						channel.writeAndFlush(new TextWebSocketFrame(jsons.toString()));
+					}
+					//返回自己，待定
+				}
+				
+			}else {
+				//保存失败，暂不处理
+			}
 		}else {
 			/**
 			 * writeAndFlush接收的参数类型是Object类型，但是一般我们都是要传入管道中传输数据的类型，比如我们当前的demo

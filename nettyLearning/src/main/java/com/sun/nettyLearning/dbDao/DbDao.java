@@ -26,4 +26,8 @@ public class DbDao {
 	public List<Map<String,Object>> queryListMap(String sql){
 		return jdbcTemplate.queryForList(sql);
 	}
+	
+	public int exceSql(String sql) {
+		return jdbcTemplate.update(sql);
+	}
 }

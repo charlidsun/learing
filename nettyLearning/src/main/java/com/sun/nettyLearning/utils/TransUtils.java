@@ -1,7 +1,8 @@
 package com.sun.nettyLearning.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,54 +14,91 @@ import java.util.Map;
  */
 public class TransUtils {
 
-	public static Object mapToObject(Map<String, Object> map, Class<?> beanClass)
-			throws Exception {
+	public static Object mapToObject(Map<String, Object> map, Class<?> beanClass) throws Exception {
 		if (map == null)
 			return null;
 		Object obj = beanClass.newInstance();
 		org.apache.commons.beanutils.BeanUtils.populate(obj, map);
 		return obj;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> listMapToList(List<Map<String, Object>> mapList, Class<?> beanClass) throws Exception{
-		if (mapList == null){
+	public static <T> List<T> listMapToList(List<Map<String, Object>> mapList, Class<?> beanClass) throws Exception {
+		if (mapList == null) {
 			return null;
 		}
 		List<Object> list = new ArrayList<>();
-		for (Map<String,Object> map : mapList){
+		for (Map<String, Object> map : mapList) {
 			Object o = mapToObject(map, beanClass);
 			list.add(o);
 		}
 		return (List<T>) list;
 	}
-	
-	public static String mapValueToStr(Map<String,Object> map,String key) {
+
+	public static String mapValueToStr(Map<String, Object> map, String key) {
 		String userId = "";
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			if (!entry.getKey().equals(key)) {
-				userId += "'" +entry.getKey() +"',";
+				userId += "'" + entry.getKey() + "',";
 			}
 		}
 		if (userId.equals("")) {
 			return "";
-		}else {
-			return userId.substring(0,userId.length()-1);
+		} else {
+			return userId.substring(0, userId.length() - 1);
 		}
 	}
-	
-	
-	public static String getKeyByValue(Map<String,Object> map,String value) {
+
+	public static String getKeyByValue(Map<String, Object> map, String value) {
 		String resultKey = "";
-		for(Map.Entry<String,Object> str : map.entrySet()){
-		    if(str.equals(str.getValue())){
-		         resultKey = str.getKey();
-		   }
+		for (Map.Entry<String, Object> str : map.entrySet()) {
+			if (str.equals(str.getValue())) {
+				resultKey = str.getKey();
+			}
 		}
 		return resultKey;
 	}
 
-	
+	public static String mapToUpdateSql(Map<String, Object> map, String tb) {
+		String str = "update " + tb + " set ";
+		for (String key : map.keySet()) {
+			if (!key.equals("id")) {
+				str += key + "=";
+				String val = map.get(key).toString();
+				str += "'" + val + "',";
+			}
+		}
+		str = str.substring(0, str.length() - 1);
+		str += " where id=" + map.get("id");
+		return str;
+	}
 
-	
+	public static String mapToInsertSql(Map<String, Object> map, String tb) {
+		map.remove("id");
+		String str = "insert into " + tb + " (";
+		for (String key : map.keySet()) {
+			str += key + ",";
+		}
+		str = str.substring(0, str.length() - 1);
+		str += ") VALUES (";
+		for (Object value : map.values()) {
+			if (value instanceof Integer) {
+				str += value + ",";
+			}
+			if (value instanceof String) {
+				str += "'" + value + "',";
+			}
+		}
+		str = str.substring(0, str.length() - 1);
+		str += ")";
+		return str;
+	}
+
+	public static String getToday() {
+		Date d = new Date();
+		System.out.println(d);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateNowStr = sdf.format(d);
+		return dateNowStr;
+	}
 }

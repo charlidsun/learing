@@ -1,6 +1,7 @@
 
 var socket;
 var userId = '';
+var toUserId = '';
 var wbUrl = 'ws://127.0.0.1:9091/ws';
 
 $(function(){
@@ -81,7 +82,17 @@ if(window.WebSocket){
         				$('#chatHistory').append(dt);
         		}
         	}
-        } 
+        }
+        if (user.msgType == 1004){
+        	//将返回的聊天记录追加到聊天窗口
+        	var chat = user.chatHistory;
+        	var ht = '<li class="sent">'
+				+'<img src="'+chat.headImg+'" alt="" />'
+				+ '<p>'+chat.selfIntr+'</p>'
+				+ '</li>'
+			$('#chatHistory').append(ht);
+        }
+        
     }
     //连接建立的回调函数
     socket.onopen = function(event){
@@ -125,6 +136,7 @@ function chatUser(obj){
 	var headImg = $(obj).data("img");
 	var chatUserName = $('#chatUserName').text();
 	if (chatUserName != loginName){
+		toUserId = loginName;
 		$('#chatUserName').text(userName);
 		$('#chatHeadImg').attr('src',headImg);
 		
@@ -183,12 +195,21 @@ $("#status-options ul li").click(function() {
 //发送新的消息
 function newMessage() {
 	message = $(".message-input input").val();
+	//获取发送人的ID
 	if($.trim(message) == '') {
 		return false;
 	}
 	
 	//发起请求，1004
-	
+	var msg = {
+	    	mgsType:1004,
+	    	userId:userId,
+	    	toUserId:toUserId,
+	    	msg:message
+	}
+	var messageStr=JSON.stringify(msg);//将表单中的数据转成json
+	console.log(messageStr);
+	send(messageStr);
 	
 	$('<li class="replies"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
 	$('.message-input input').val(null);
