@@ -62,7 +62,7 @@ public class ShiroConfiguration {
 	}
 	
 	 /**
-     * ShiroFilter<br/>
+     * ShiroFilter
      * 注意这里参数中的 StudentService 和 IScoreDao 只是一个例子，因为我们在这里可以用这样的方式获取到相关访问数据库的对象，
      * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。实际项目中，请使用自己的Service来处理业务逻辑。
      *
@@ -77,7 +77,7 @@ public class ShiroConfiguration {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/chat/chat");
+        shiroFilterFactoryBean.setSuccessUrl("/index");
         shiroFilterFactoryBean.setUnauthorizedUrl("/denied");
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;
@@ -87,18 +87,13 @@ public class ShiroConfiguration {
      * 加载shiroFilter权限控制规则（从数据库读取然后配置）
      */
     private void loadShiroFilterChain(ShiroFilterFactoryBean shiroFilterFactoryBean) {
-        /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
-        // TODO 重中之重啊，过滤顺序一定要根据自己需要排序
+        //过滤顺序一定要根据自己需要排序
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 需要验证的写 authc 不需要的写 anon
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
-        filterChainDefinitionMap.put("/static", "anon");
-        filterChainDefinitionMap.put("/css", "anon");
-        filterChainDefinitionMap.put("/js", "anon");
-        filterChainDefinitionMap.put("/index", "authc");
-        // anon：它对应的过滤器里面是空的,什么都没做
-        // 不用注解也可以通过 API 方式加载权限规则
-        //filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/favicon.ico", "anon");//匿名访问静态资源
+        filterChainDefinitionMap.put("/css/*", "anon");//匿名访问静态资源
+        filterChainDefinitionMap.put("/js/*", "anon");//匿名访问静态资源
+        filterChainDefinitionMap.put("/test3", "anon");//匿名访问静态资源
+        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 }

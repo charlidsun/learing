@@ -55,6 +55,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		System.out.println("有朋友下线了：" + ctx.channel().id().asLongText());
 		// 移除到ChannelGroup
 		channelGroup.remove(ctx.channel());
+		// 根据channel，移除map。
 		String key = TransUtils.getKeyByValue(onLine, ctx.channel().id().asLongText());
 		onLine.remove(key);
 	}
@@ -78,14 +79,13 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		if (t.getMgsType() == 1001) {
 			// 首先保存到map里面
 			onLine.put(t.getUserId(),c.id().asLongText());
-			System.err.println("当前在线的人数" + onLine.toString());
 			// 其次获取用户的信息
 			UserInfo userInfo = userInfoService.getUserInfo(t.getUserId());
 			resMap.put("msgType", 1001);
 			resMap.put("user", userInfo);
 			resMap.put("onLine", channelGroup.size());
 			// 上线的人，去除val值
-			String userId = TransUtils.mapValueToStr(onLine,t.getUserId());
+			String userId = TransUtils.mapKeyToStr(onLine,t.getUserId());
 			List<UserInfo> userList = userInfoService.getListUserInfo(userId);
 			resMap.put("userList", userList != null ? userList : "");
 			
@@ -168,16 +168,9 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 	 * @return
 	 */
 	public TransMsg transMsg(String msg) {
-
 		TransMsg transMsg = JsonUtils.jsonToBean(msg, TransMsg.class);
-
-		System.out.println(transMsg.toString());
-
 		return transMsg;
 	}
 
-	public void tran() {
-		
-	}
 
 }

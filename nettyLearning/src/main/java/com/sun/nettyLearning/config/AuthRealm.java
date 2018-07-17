@@ -23,7 +23,6 @@ import com.sun.nettyLearning.user.service.UserInfoService;
  * @author 孙荆阁:
  * @Date 2018年7月14日 下午5:23:28
  */
-
 public class AuthRealm extends AuthorizingRealm{
 
 	@Autowired 
@@ -35,10 +34,8 @@ public class AuthRealm extends AuthorizingRealm{
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-		System.out.println("开始授权");
 		Session session = SecurityUtils.getSubject().getSession();
 		UserInfo user = (UserInfo) session.getAttribute("USER_SESSION");
-		System.out.println(user.toString());
 		// 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		// 用户的角色集合
@@ -76,7 +73,6 @@ public class AuthRealm extends AuthorizingRealm{
 
 		// 获取用户名
 		String userName = (String) token.getPrincipal();
-		System.out.println("页面传递过来的用户名" + userName);
 		// 从map里获取用户名Optional->JDK8新特性
 		//UserInfo userInfo = Optional.ofNullable(
 		//		DBCache.USER_CACHE.get(userName)).orElseThrow(

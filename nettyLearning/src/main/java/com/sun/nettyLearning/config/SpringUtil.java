@@ -5,6 +5,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+/**
+ * 功能：ApplicationContext的配置类，主要是让普通的类也可以使用service
+ * 说明：
+ * @author sjg:
+ * @Date 2018年7月14日 下午5:23:28
+ */
 @Component
 public class SpringUtil implements ApplicationContextAware {
 
