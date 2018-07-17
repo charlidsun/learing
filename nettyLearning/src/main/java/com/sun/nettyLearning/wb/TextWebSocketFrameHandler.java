@@ -80,6 +80,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 			// 首先保存到map里面
 			onLine.put(t.getUserId(),c.id().asLongText());
 			// 其次获取用户的信息
+			System.out.println(t.getUserId());
 			UserInfo userInfo = userInfoService.getUserInfo(t.getUserId());
 			resMap.put("msgType", 1001);
 			resMap.put("user", userInfo);

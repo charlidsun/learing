@@ -24,6 +24,7 @@ public class UserInfoService {
 	
 	public UserInfo getUserInfo(String name) {
 		String sql = "select login.id,login.loginName,loginPwd,login.salt,login.lock,detail.userName,detail.phone,detail.gender,detail.headImg,detail.selfIntr from userlogin login LEFT JOIN userdetails detail on login.id = detail.id where login.loginName='"+name+"'";
+		System.out.println(sql);
 		Map<String,Object> userMap = dbDao.queryMap(sql);
 		UserInfo userInfo = null;
 		try {

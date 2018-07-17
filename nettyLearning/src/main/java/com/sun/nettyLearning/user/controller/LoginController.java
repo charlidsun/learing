@@ -37,6 +37,7 @@ public class LoginController {
 	@PostMapping(value = "/login")
 	public String login(HttpServletResponse response,String loginName,String loginPwd,Model model) throws Exception{
 		Subject sub = SecurityUtils.getSubject();
+		System.out.println(loginName+"-"+loginPwd);
 		UsernamePasswordToken token = new UsernamePasswordToken(loginName,
 				loginPwd);
 		try {
@@ -66,8 +67,9 @@ public class LoginController {
 			return "login";
 			//throw new CustomException(2004, "AuthenticationException");
 		}
-		response.sendRedirect("index");
-		return "index";
+		//response.sendRedirect("index");
+		model.addAttribute("userId", loginName);
+		return "chat/chat";
 	}
 	
 	@GetMapping(value="/index")
