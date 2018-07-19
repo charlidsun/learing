@@ -1,6 +1,7 @@
 
 var socket;
 var userId = '';
+var headImg = '';
 var toUserId = '';
 var wbUrl = 'ws://127.0.0.1:9091/ws';
 
@@ -26,6 +27,7 @@ if(window.WebSocket){
         if (user.msgType == 1001){
         	//用户名
         	$('#profile-img').attr('src',user.user.headImg);
+        	headImg = user.user.headImg;
         	$('#profile-name').text(user.user.userName);
         	//上线的人
         	if (user.userList != null && user.userList.length>0){
@@ -75,17 +77,31 @@ if(window.WebSocket){
         				$('#chatHistory').append(dt);
         		}
         	}
+        	//判断，这个人是否是离线，如果离线不允许发消息
+        	if ($('#'+toUserId).hasClass('offline')){
+        		$('.message-input').hide();
+        	}else{
+        		$('.message-input').show();
+        	}
         }
         if (user.msgType == 1004){
-        	//将返回的聊天记录追加到聊天窗口
-        	var chat = user.chatHistory;
-        	var ht = '<li class="sent">'
-				+'<img src="'+chat.headImg+'" alt="" />'
-				+ '<p>'+chat.selfIntr+'</p>'
-				+ '</li>'
-			$('#chatHistory').append(ht);
+        	console.log(user.chatHistory.receiveUserId);
+        	console.log(toUserId);
+        	//首先判断当前窗口是否是接受消息的人
+        	if (user.chatHistory.loginName != toUserId){
+        		//提示用户有新消息了
+        		$("#"+user.chatHistory.loginName).removeClass("offline");
+            	$("#"+user.chatHistory.loginName).attr("class","busy");
+        	}else{
+        		//将返回的聊天记录追加到聊天窗口
+            	var chat = user.chatHistory;
+            	var ht = '<li class="sent">'
+    				+'<img src="'+chat.headImg+'" alt="" />'
+    				+ '<p>'+chat.selfIntr+'</p>'
+    				+ '</li>'
+    			$('#chatHistory').append(ht);
+        	} 
         }
-        
     }
     //连接建立的回调函数
     socket.onopen = function(event){
@@ -204,7 +220,7 @@ function newMessage() {
 	console.log(messageStr);
 	send(messageStr);
 	
-	$('<li class="replies"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+	$('<li class="replies"><img src="'+headImg+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
 	$('.message-input input').val(null);
 	$('.contact.active .preview').html('<span>You: </span>' + message);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
