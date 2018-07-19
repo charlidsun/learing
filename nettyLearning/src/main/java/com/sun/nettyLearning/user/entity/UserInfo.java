@@ -6,7 +6,7 @@ public class UserInfo {
 	private String loginName;
 	private String loginPwd;
 	private String salt;
-	private int lock;
+	private int lock;//传递给前台，代表上线与否
 	private String userName;
 	private String phone;
 	private String gender;

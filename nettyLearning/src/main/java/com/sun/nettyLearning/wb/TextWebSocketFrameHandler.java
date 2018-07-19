@@ -79,29 +79,47 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		if (t.getMgsType() == 1001) {
 			// 首先保存到map里面
 			onLine.put(t.getUserId(),c.id().asLongText());
-			// 其次获取用户的信息
-			System.out.println(t.getUserId());
+			// 获取用户自己的信息
 			UserInfo userInfo = userInfoService.getUserInfo(t.getUserId());
 			resMap.put("msgType", 1001);
 			resMap.put("user", userInfo);
 			resMap.put("onLine", channelGroup.size());
-			// 上线的人，去除val值
-			String userId = TransUtils.mapKeyToStr(onLine,t.getUserId());
-			List<UserInfo> userList = userInfoService.getListUserInfo(userId);
-			resMap.put("userList", userList != null ? userList : "");
+			// 获取自己的好友信息
+			List<UserInfo> userList = userInfoService.getFriendsList(t.getUserId());
 			
-			JSONObject json = JSONObject.fromObject(resMap);
-			ctx.channel().writeAndFlush(new TextWebSocketFrame(json.toString()));
 			Map<String,Object> otherMap = new HashMap<>();
 			otherMap.put("msgType", 1002);
 			otherMap.put("user", userInfo);
 			JSONObject jsons = JSONObject.fromObject(otherMap);
-			//告知其他人，有人上线了
-			for (Channel channel : channelGroup) {
-				if (!channel.id().asLongText().equals(onLine.get(t.getUserId().toString()))) {
-					channel.writeAndFlush(new TextWebSocketFrame(jsons.toString()));
+			//循环出已经上线的好友
+			System.out.println("已经上线好友");
+			System.out.println(onLine.toString());
+			
+			Map<String,Object> onLineFriends = new HashMap<String,Object>();
+			for (String key : onLine.keySet()) {
+				System.out.println("在线人员的key" + key);
+				for (int i=0;i<userList.size();i++) {
+					if (key.equals(userList.get(i).getLoginName())) {
+						//在线状态
+						userList.get(i).setLock(99);
+						onLineFriends.put(key, onLine.get(key));
+					}
 				}
 			}
+			System.out.println(onLineFriends.toString());
+			
+			//告知其他好友，有人上线了
+			for (Channel channel : channelGroup) {
+				for (String key : onLineFriends.keySet()) {
+					if (channel.id().asLongText().equals(onLineFriends.get(key).toString())) {
+						channel.writeAndFlush(new TextWebSocketFrame(jsons.toString()));
+					}
+				}
+			}
+			//将结果集返回
+			resMap.put("userList", userList != null ? userList : "");
+			JSONObject json = JSONObject.fromObject(resMap);
+			ctx.channel().writeAndFlush(new TextWebSocketFrame(json.toString()));
 			
 		} else if(t.getMgsType() == 1003){
 			System.out.println("1003...返回聊天记录");
@@ -173,5 +191,12 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
 		return transMsg;
 	}
 
+	//String userId = TransUtils.mapKeyToStr(onLine,t.getUserId());
+	
+	//for (Channel channel : channelGroup) {
+	//	if (!channel.id().asLongText().equals(onLine.get(t.getUserId().toString()))) {
+	//		channel.writeAndFlush(new TextWebSocketFrame(jsons.toString()));
+	//	}
+	//}
 
 }

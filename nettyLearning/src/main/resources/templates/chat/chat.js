@@ -21,7 +21,7 @@ if(window.WebSocket){
     socket = new WebSocket(wbUrl);
     //客户端收到服务器消息的时候就会执行这个回调方法
     socket.onmessage = function (event) {
-        //连接协议，参数1001，初始化，返回信息
+        //连接协议，参数1001，初始化，返回信息，返回的是用户的好友列表，包括在线和离线的
         var user = JSON.parse(event.data);
         if (user.msgType == 1001){
         	//用户名
@@ -31,9 +31,10 @@ if(window.WebSocket){
         	if (user.userList != null && user.userList.length>0){
         		for (var i=0;i<user.userList.length;i++){
         			var lineUser = user.userList[i];
+        			var lock = lineUser.lock == 99 ? "online" : "offline";
         			var listHtml = '<li class="contact" data-id="'+lineUser.loginName+'" data-name="'+lineUser.userName+'" data-img="'+lineUser.headImg+'" onclick="chatUser(this)">'
    					 			 + '	<div class="wrap">'
-   					 			 + '		<span class="contact-status online"></span>'
+   					 			 + '		<span id="'+lineUser.loginName+'" class="contact-status '+lock+'"></span>'
    					 			 + '		<img src="'+lineUser.headImg+'" alt="" />'
    					 			 + '		<div class="meta">'
    					 			 + '			<p class="name">'+lineUser.userName+'</p>'
@@ -45,20 +46,12 @@ if(window.WebSocket){
         		}
         	}
         }
-        //其他人上线的通知
+        //其他人上线的通知,因为是好友列表，所有不能append
         if (user.msgType == 1002){
-        	var lineUser = user.user;
-        	var listHtml = '<li class="contact" data-id="'+lineUser.loginName+'" data-name="'+lineUser.userName+'" data-img="'+lineUser.headImg+'" onclick="chatUser(this)">'
-		 			 + '	<div class="wrap">'
-		 			 + '		<span class="contact-status online"></span>'
-		 			 + '		<img src="'+lineUser.headImg+'" alt="" />'
-		 			 + '		<div class="meta">'
-		 			 + '			<p class="name">'+lineUser.userName+'</p>'
-		 			 + '			<p class="preview">'+lineUser.selfIntr+'</p>'
-		 			 + '		</div>'
-		 			 + '	</div>'
-		 			 + '</li>'	
-		 	$('#onLineList').append(listHtml);
+        	console.log(user)
+        	//找到那个div直接更新状态
+        	$("#"+user.user.loginName).removeClass("offline");
+        	$("#"+user.user.loginName).attr("class","online");
         }
         //展示聊天记录
         console.log("---")

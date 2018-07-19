@@ -49,4 +49,29 @@ public class UserInfoService {
 		}
 		return userInfo;
 	}
+	public List<UserInfo> getFriendsList(String name){
+		if (name.equals("")) {
+			return null;
+		}
+		String sql = " SELECT fr.id,fr.sendUserId loginName,lo.loginPwd,lo.salt,lo.lock, de.userName,de.phone,de.gender,de.headImg,de.selfIntr "
+		           + " FROM friends fr "
+		           + " LEFT JOIN userlogin lo ON lo.loginName = fr.sendUserId "
+		           + " LEFT JOIN userdetails de ON de.id = lo.id "
+		           + " where fr.requestUserId = '"+name+"' and fr.state = 1 "
+		           + " UNION ALL "
+		           + " SELECT fr.id,fr.requestUserId loginName ,lo.loginPwd,lo.salt,lo.lock,de.userName,de.phone,de.gender,de.headImg,de.selfIntr "
+		           + " FROM friends fr "
+		           + " LEFT JOIN userlogin lo ON lo.loginName = fr.requestUserId "
+		           + " LEFT JOIN userdetails de ON de.id = lo.id "
+		           + " where fr.sendUserId = '"+name+"' and fr.state = 1 ";		
+		List<Map<String,Object>> userMap = dbDao.queryListMap(sql);
+		List<UserInfo> userInfo = null;
+		try {
+			userInfo = TransUtils.listMapToList(userMap, UserInfo.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userInfo;
+	}
+	
 }
