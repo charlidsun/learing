@@ -12,6 +12,7 @@ import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
  * @Date 2018年7月19日 上午10:13:01
  */
 @SpringBootApplication
+//使用dubbospringboot，开启
 @EnableDubboConfiguration
 public class LearnConsumer {
 

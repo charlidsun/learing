@@ -10,7 +10,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.sun.learn.IUserInfoService;
 
 /**
- * 功能：
+ * 功能：消费者，调用提供者
  * 说明：
  * @author 孙荆阁:
  * @Date 2018年7月19日 上午10:05:01
@@ -19,6 +19,7 @@ import com.sun.learn.IUserInfoService;
 @RequestMapping("/hello")
 public class UserInfoController {
 
+	//api的接口
 	@Reference
 	IUserInfoService userService;
 	

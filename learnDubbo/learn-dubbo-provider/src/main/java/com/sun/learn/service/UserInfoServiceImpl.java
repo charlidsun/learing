@@ -9,7 +9,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.sun.learn.IUserInfoService;
 
 /**
- * 功能： 说明：
+ * 功能： api接口的实现类
  * 
  * @author 孙荆阁:
  * @Date 2018年7月19日 上午9:53:53
