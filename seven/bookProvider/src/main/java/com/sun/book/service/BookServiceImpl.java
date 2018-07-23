@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.sun.book.domain.Books;
+import com.sun.book.repository.BooksMapper;
 import com.sun.common.utils.TransUtils;
 
 /**
@@ -29,32 +30,16 @@ import com.sun.common.utils.TransUtils;
 public class BookServiceImpl implements IBookService {
 
 	@Autowired
-	JdbcTemplate jdbcTemp;
+	BooksMapper booksMapper;
 
 	@Override
 	public List<Books> getBooksByCategories(int categoriesId) {
-		List<Map<String, Object>> ma = jdbcTemp
-				.queryForList("SELECT bo.* FROM dic_book bo LEFT JOIN rel_book_categories bo_ca ON bo_ca.book_id = bo.id where bo_ca.categories_id = "+categoriesId+" and bo.lock = 0");
-		List<Books> list = new ArrayList<Books>();
-		try {
-			list = TransUtils.listMapToList(ma,Books.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+		return booksMapper.getBooksByCategories(categoriesId);
 	}
 
-	
 	@Override
-	public List<Books> getAllBooks() {
-		List<Map<String, Object>> ma = jdbcTemp
-				.queryForList("SELECT bo.* FROM dic_book bo");
-		List<Books> list = new ArrayList<Books>();
-		try {
-			list = TransUtils.listMapToList(ma,Books.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+	public Books getBooksById(Integer id) {
+		return booksMapper.getBooksById(id);
 	}
+
 }

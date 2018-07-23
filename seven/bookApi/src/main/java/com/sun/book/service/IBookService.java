@@ -15,7 +15,6 @@ public interface IBookService {
 	//根据分类查询书籍信息
 	public List<Books> getBooksByCategories(int categoriesId);
 
-	//获取所有的书籍
-	public List<Books> getAllBooks();
-	
+	//根据ID查询书籍信息
+	public Books getBooksById(Integer id);
 }

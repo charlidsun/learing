@@ -33,7 +33,7 @@ public class BooksController {
 
 	@GetMapping("/")
 	public List<Books> getAllBooks() {
-		return bookService.getAllBooks();
+		return bookService.getBooksByCategories(0);
 	}
 
 	@GetMapping("/categories/{id}")
@@ -41,9 +41,13 @@ public class BooksController {
 		return bookService.getBooksByCategories(id);
 	}
 	
+	@GetMapping("/{id}")
+	public Books getBooksById(@PathVariable Integer id){
+		return bookService.getBooksById(id);
+	}
+	
 	@PostMapping("/")
 	public int saveBook(@ModelAttribute Books books){
-		
 		return 1;
 	}
 }
