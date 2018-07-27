@@ -1,7 +1,10 @@
 package com.sun.magic.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sun.magic.utils.NetUtils;
 
@@ -11,8 +14,16 @@ import com.sun.magic.utils.NetUtils;
  * @author 孙荆阁:
  * @Date 2018年7月27日 上午11:47:44
  */
-@RestController
+@Controller
+@RequestMapping("/chat")
 public class ChatController {
+	
+	@PostMapping("/searchChat")
+	public String getSearchChat(String keyword,Model model) {
+		model.addAttribute("ddd", "dd");
+		return "list";
+	}
+	
 
 	@GetMapping("/list")
 	public String getM(){
