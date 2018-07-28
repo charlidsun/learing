@@ -37,17 +37,12 @@ public class ChatController {
 		Root root = (Root) JSONObject.toJavaObject(object, Root.class);
 		//判断请求是否成功
 		if (root.getBase_resp().getRet() != 0){
-			
+			model.addAttribute("token", "token失效，请重新添加");
+			return "index";
 		}
-
+		//将查出来的数据传递给下一个页面
+		model.addAttribute("list",root.getList());
+		model.addAttribute("total", root.getTotal());
 		return "list";
-	}
-
-	@GetMapping("/list")
-	public String getM() {
-		String d = NetUtils
-				.getJsonData("https://mp.weixin.qq.com/cgi-bin/searchbiz?action=search_biz&token=672973593&lang=zh_CN&f=json&ajax=1&random=0.8808738231455555&query=%E4%B8%81%E9%A6%99%E5%9B%AD&begin=0&count=5");
-		System.out.println(d);
-		return "";
 	}
 }
