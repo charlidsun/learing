@@ -40,7 +40,10 @@ $(".btn-wiki").click(function(event) {
 
 	if (keyword !== "") {
 		//使用ajax请求
-		ajax(keyword);
+		document.write("<form action='/chat/searchChat' method='post' name='form1' style='display:none'>");  
+		document.write("<input type='hidden' name='keyword' value="+keyword+">");  
+		document.write("</form>");  
+		document.form1.submit();  
 	}else {
 		alert("请输入搜索内容");
 	}
