@@ -31,6 +31,4 @@ public class NetUrlConst {
 		return CHAT_ARTICLE_URL + param;
 	}
 
-	
-
 }

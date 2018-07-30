@@ -31,9 +31,9 @@
 						<div class="display-results" style="display: flex;">
 							<!-- 查询结果 -->
 							<div th:each="m : ${list}" class='result-list result'>
-								<img alt="" src="${m.round_head_img}"> 
+								<img alt="" th:attr="src=${m.round_head_img}"> 
 								<br>
-								<span class='result-title title'>${m.nickname}</span>
+								<span class='result-title title' th:text="${m.nickname}"></span>
 								<br>
 								<div th:switch="${m.service_type}">
 									<span th:case="1" class='result-metadata metadata'>订阅号</span>
