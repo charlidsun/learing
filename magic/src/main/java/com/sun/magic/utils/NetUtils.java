@@ -142,12 +142,15 @@ public class NetUtils {
 	                connection.getInputStream(),"UTF-8"));
 	       
 	        while ((lines = reader.readLine()) != null)  {
+	        	System.err.println(lines);
+	            return lines;
 	        }
 	        reader.close();
 	        // 断开连接
 	        connection.disconnect();
 		} catch (Exception e) {
+			
 		}
-        return lines;
+		return lines;
     }
 }

@@ -14,10 +14,10 @@ import com.sun.magic.utils.NetUtils;
 public class Test {
 
 	public static void main(String[] args) {
-		try {
-			MyHttpUrlConn.Get();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+	}
+	
+	public void trans(){
+		String val = "";
 	}
 }

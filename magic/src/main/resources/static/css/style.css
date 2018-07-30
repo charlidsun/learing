@@ -698,7 +698,8 @@ h1 {
   width: 350px; }
 
 .result-list {
-  margin-top: 20px; }
+  margin-top: 20px;
+  margin:20px; }
 
 .result-title a {
   color: #2619AF;
