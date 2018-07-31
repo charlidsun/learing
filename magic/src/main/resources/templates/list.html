@@ -28,9 +28,11 @@
 			<div class="container">
 				<section class="search-results">
 					<div class="one-half column">
-						<div class="display-results" style="display: flex;">
+						<div class="display-results" style="display: flex;flex-flow: row wrap;">
 							<!-- 查询结果 -->
-							<div th:each="m : ${list}" class='result-list result'>
+							<div th:each="m : ${list}" class='result-list result' onclick="linkToList(this)">
+								<p th:text="${m.fakeid}" style="display: none"></p>
+								<p th:text="${m.nickname}" style="display: none"></p>
 								<img alt="" th:attr="src=${m.round_head_img}"> 
 								<br>
 								<span class='result-title title' th:text="${m.nickname}"></span>

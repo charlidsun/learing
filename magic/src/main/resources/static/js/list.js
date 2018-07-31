@@ -16,4 +16,17 @@ $(".result-btn-wiki").click(function (event) {
 	}
 });
 
+function linkToList(obj){
+	var fakeId = $(obj).children("p").eq(0).text();
+	var name = $(obj).children("p").eq(1).text();
+	var msg = fakeId +"$"+name;
+	
+	alert(msg);
+	//post传递给后台
+	document.write("<form action='/chat/searchArticle' method='post' name='form2' style='display:none'>");  
+	document.write("<input type='hidden' name='keyword' value="+msg+">");  
+	document.write("</form>");  
+	document.form2.submit();  
+}
+
 
