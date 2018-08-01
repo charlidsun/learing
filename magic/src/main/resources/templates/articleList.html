@@ -19,7 +19,7 @@
 						<div class="two-thirds column">
 							<form action="" class="result-wiki-search-form">
 								<!-- 展示公众号信息 -->
-								<input type="text" placeholder="Search Wikipedia..." class="result-wiki-search-form-input" id="result-wiki-search-form-input">
+								
 							</form>
 						</div>		
 					</div>
@@ -35,10 +35,6 @@
 								<br>
 								<span class='result-title title'>${m.nickname}</span>
 								<br>
-								<div th:switch="${m.service_type}">
-									<span th:case="1" class='result-metadata metadata'>订阅号</span>
-									<span th:case="2" class='result-metadata metadata'>服务号</span>
-								</div>
 							</div>
 						</div>
 					</div>
