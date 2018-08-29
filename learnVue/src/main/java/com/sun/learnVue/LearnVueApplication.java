@@ -22,6 +22,16 @@ public class LearnVueApplication {
 		model.addAttribute("players",list);
 		return "index";
 	}
+	
+	@GetMapping("/element")
+	public String element(Model model) {
+		List<Stu> list = new ArrayList<Stu>();
+		list.add(new Stu("cccc", "dddd"));
+		list.add(new Stu("aaaa", "bbbbb"));
+		model.addAttribute("name", "FootBall");
+		model.addAttribute("players",list);
+		return "element";
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(LearnVueApplication.class, args);
