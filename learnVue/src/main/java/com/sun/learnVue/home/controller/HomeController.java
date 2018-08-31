@@ -1,9 +1,5 @@
 package com.sun.learnVue.home.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +17,6 @@ public class HomeController {
 	
 	@GetMapping
 	public String getBannerList(Model model){
-		List<Map<String,Object>> bannerList = new ArrayList<>();
-		bannerList = homeService.getBannerList();
-		
-		model.addAttribute("banner", bannerList);
 		return "index";
 	}
 }
