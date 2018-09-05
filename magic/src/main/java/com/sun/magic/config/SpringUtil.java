@@ -1,8 +1,11 @@
 package com.sun.magic.config;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,7 +13,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author sjg:
  * @Date 2018年7月14日 下午5:23:28
- */
+ */	
 @Component
 public class SpringUtil implements ApplicationContextAware {
 
@@ -22,6 +25,7 @@ public class SpringUtil implements ApplicationContextAware {
 		if (SpringUtil.applicationContext == null) {
 			SpringUtil.applicationContext = applicationContext;
 		}
+		 System.out.println("---");
 	}
 
 	public static ApplicationContext getApplicationContext() {

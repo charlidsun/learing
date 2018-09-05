@@ -11,7 +11,7 @@ import com.sun.magic.domain.Movies;
 import com.sun.magic.repository.MoviesDao;
 
 /**
- * 功能： 说明：
+ * 功能： 说明：保存用户名和头像
  * 
  * @author 孙荆阁:
  * @Date 2018年7月26日 下午1:33:14

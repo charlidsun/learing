@@ -2,20 +2,19 @@ package com.sun.magic.spy;
 
 import java.util.List;
 
+import com.sun.magic.config.SpringUtil;
+import com.sun.magic.domain.Movies;
+import com.sun.magic.service.MoviesService;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import com.sun.magic.config.SpringUtil;
-import com.sun.magic.domain.Movies;
-import com.sun.magic.service.MoviesService;
-
 /**
- * 功能：爬虫类 说明：
- * 
- * @author 孙荆阁:
- * @Date 2018年7月26日 下午1:30:21
+ * 爬取头像的基础类
+ * @author Administrator
+ *
  */
 public class ChatSpy implements PageProcessor {
 
