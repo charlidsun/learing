@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class JdbcUtilss {
 	// 定义数据库四大基本信息
 	private static String driver = "com.mysql.jdbc.Driver";
-	private static String url = "jdbc:mysql://127.0.0.1:3306/learning";
+	private static String url = "jdbc:mysql://127.0.0.1:3306/learning?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
 	private static String username = "root";
 	private static String password = "123456";
 	private static Connection conn;

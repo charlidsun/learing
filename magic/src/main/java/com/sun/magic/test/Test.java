@@ -14,10 +14,11 @@ import com.sun.magic.utils.NetUtils;
 public class Test {
 
 	public static void main(String[] args) {
-	
+		trans();
 	}
 	
-	public void trans(){
-		String val = "";
+	public static void trans(){
+		String val = "http://www.gotsoon.com/wangming/nvsheng/list1.html";
+		System.out.println(val.substring(39,val.length()));
 	}
 }
