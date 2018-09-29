@@ -24,7 +24,7 @@ import com.sun.magic.utils.NetUtils;
 @RequestMapping("/chat")
 public class ChatController {
 
-	private static String cookie = "pgv_pvi=2510338048; _ga=GA1.2.2060100115.1529378160; pgv_pvid=563287400; pt2gguin=o0765970426; RK=TWrpPjUBac; ptcz=fb08d6f1207ee5bc3ae897b74e5ba1740b2967eb1840ca4acb88bd4f8569230f; ua_id=4I19jxMMj2diFYPcAAAAANDBW_2WC2y4qf_8FXQnSII=; mm_lang=zh_CN; noticeLoginFlag=1; o_cookie=765970426; pac_uid=1_765970426; tvfe_boss_uuid=e0a07dd29593418c; AMCV_248F210755B762187F000101%40AdobeOrg=-1891778711%7CMCIDTS%7C17726%7CMCMID%7C66100023919907103941143036901107031827%7CMCAAMLH-1532070553%7C11%7CMCAAMB-1532070553%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1531472953s%7CNONE%7CMCSYNCSOP%7C411-17733%7CMCAID%7CNONE%7CvVersion%7C2.4.0; remember_acct=jntongbang%40yeah.net; rewardsn=; wxtokenkey=777; pgv_si=s6038854656; uuid=91d5547caab0348220ea6fd97915db51; ticket=816ea54b054731e91d6583f6f6fd902bf27afdf3; ticket_id=gh_d7c05877c669; cert=1jip62kC9qdXkJkMXbWb9oGIMb1ZWbqE; data_bizuin=3247534487; bizuin=3244534398; data_ticket=VFTXz2GA9KZQWSfAKpoMOyUFS1ZSseQY0DtB2qwM9Gwi+bFHK5+0rQ8Az39QRcp5; slave_sid=aUJWZlRpbjJTN1RDSDNnVWt5bkZmV3N1amY2WWVVYlFYeE1SNzVFMTlGbFhoSGZ4NU5vYlQwZ1Y3ZmZFa1FmbkpZMTMzRzlIcWVMUjBQa01rT3pVTmNTYmZCM2tqNGtNTUFlalR3Y2pBTklKdHFOZUhyMXY5V2Z5aVh1TFpFVktVRE9obW9ZYW9TMEpKTGRs; slave_user=gh_d7c05877c669; xid=7cf0cc8b27af489da6237ee97076b80b; openid2ticket_ol3GRwSxbJdVvHpL7f80T29MinjQ=fA9M1jrNtMK1KHzHJ52qZwXk6k8I3sWITyVnKP8wPJU=";
+	private static String cookie = "pgv_pvi=2510338048; _ga=GA1.2.2060100115.1529378160; pgv_pvid=563287400; pt2gguin=o0765970426; RK=TWrpPjUBac; ptcz=fb08d6f1207ee5bc3ae897b74e5ba1740b2967eb1840ca4acb88bd4f8569230f; ua_id=4I19jxMMj2diFYPcAAAAANDBW_2WC2y4qf_8FXQnSII=; mm_lang=zh_CN; o_cookie=765970426; pac_uid=1_765970426; tvfe_boss_uuid=e0a07dd29593418c; AMCV_248F210755B762187F000101%40AdobeOrg=-1891778711%7CMCIDTS%7C17726%7CMCMID%7C66100023919907103941143036901107031827%7CMCAAMLH-1532070553%7C11%7CMCAAMB-1532070553%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1531472953s%7CNONE%7CMCSYNCSOP%7C411-17733%7CMCAID%7CNONE%7CvVersion%7C2.4.0; eas_sid=w1r5x3b3k7b0C1E9j7d1M6L5d0; noticeLoginFlag=1; uin=o0765970426; skey=@2GcW5HBvK; ptisp=cnc; pgv_si=s4584514560; uuid=6507a10c2362e70cc3ba71a03a502741; ticket=92cd02b75b04cb1d0e85dabdd5894e3bd78b6c54; ticket_id=gh_d7c05877c669; cert=yN_5OVGWsliZ7is5iXu_DhIDDqpXR_WM; data_bizuin=3247534487; bizuin=3244534398; data_ticket=0m9TQKn4rgFsJ+hYiuoOUq/SowVRdEqCYmjnyCGpMqkIrQSUC3qldNdDLjE1/U6h; slave_sid=Z0ZuYXlzZW9EQ1oyU1NkWktrT0VBSFRVcWx0VUZYNlZ6T1BfWkRlUWV2TUx6RHF0UTJvM1ptaW04SGNkUzJiVEVCamhkRk02cV9CWnRyQ2QzbEVObFFTQkhoWnpGbmlKcDFwb3FuTHR1YThoOWlYN1cwMGt5azlKZFozM3hGRUt3T2JEdm1oY2xScGtDUzVI; slave_user=gh_d7c05877c669; xid=6a673d47c7c64a7922e3bd76c0bd7984; openid2ticket_ol3GRwSxbJdVvHpL7f80T29MinjQ=ME6nUEHRSvasz+2FE0Wo6TamuRuJEhnY7hI8Wk8SYJw=";
 	@Autowired
 	RedisCacheService redisCacheService;
 
@@ -32,7 +32,7 @@ public class ChatController {
 	public String getSearchChat(String keyword, String begin, String count,
 			Model model) {
 		String chatStr = NetUtils.GetChat(
-				NetUrlConst.getChatSearchUrl("609356543", keyword, "0", "10"),
+				NetUrlConst.getChatSearchUrl("1513109062", keyword, "0", "10"),
 				cookie);
 		System.out.println(NetUrlConst.getChatSearchUrl("609356543", keyword, "0", "10"));
 		System.out.println(chatStr);
