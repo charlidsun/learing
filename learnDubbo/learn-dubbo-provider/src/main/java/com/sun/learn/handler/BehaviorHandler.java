@@ -26,9 +26,6 @@ public class BehaviorHandler {
 	@RabbitListener(queues = { RabbitConfig.BEHAVIOR_COLLECTION_NAME })
 	public void listenerBehavior(String msg, Message message, Channel channel) {
 		log.info("[ behavior_collection 监听的消息] - [{}]", msg.toString());
-		// channel error; protocol method: #method<channel.close>(reply-code=406,
-		// reply-text=PRECONDITION_FAILED - unknown delivery tag 1, class-id=60,
-		// method-id=80)
 		try {
 			// 1保存数据库操作
 			// 2通知 MQ 消息已被成功消费,可以ACK了
