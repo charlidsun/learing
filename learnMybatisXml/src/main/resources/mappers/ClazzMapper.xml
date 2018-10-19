@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.learnMybatisXml.repository.ClazzRepository">
+	
+	<!-- sql -->
+	<select id="getClazz" parameterType="int" resultMap="ClazzResultMap">
+		select * from clazz cl JOIN teacher te on te.t_id = cl.teacher_id where c_id = #{id};	
+	</select>
+	<!-- return -->
+	<resultMap type="com.sun.learnMybatisXml.domain.Clazz" id="ClazzResultMap">
+		<id property="id" column="c_id"/>
+		<result property="name" column="c_name"/>
+		<association property="teacher" javaType="com.sun.learnMybatisXml.domain.Teacher">
+			<id property="id" column="t_id"/>
+			<result property="name" column="t_name"/>
+		</association>
+	</resultMap>
+	
+	<select id="getClazzStu" parameterType="int" resultMap="ClazzStuMap">
+		select * from clazz cl JOIN teacher te on te.t_id = cl.teacher_id JOIN student st on st.class_id = cl.c_id where c_id = #{id};
+	</select>
+	<resultMap type="com.sun.learnMybatisXml.domain.Clazz" id="ClazzStuMap">
+		<id property="id" column="c_id"/>
+		<result property="name" column="c_name"/>
+		<association property="teacher" column="teacher_id" javaType="com.sun.learnMybatisXml.domain.Teacher">
+			<id property="id" column="t_id"/>
+			<result property="name" column="t_name"/>
+		</association>
+		<collection property="listStudent" ofType="com.sun.learnMybatisXml.domain.Student">
+			<id property="id" column="s_id"/>
+			<result property="name" column="s_name"/>
+		</collection>
+	</resultMap>
+	
+	
+	<select id="getClazzById" parameterType="int" resultMap="ClazzStuMap">
+		select * from clazz cl JOIN teacher te on te.t_id = cl.teacher_id JOIN student st on st.class_id = cl.c_id where 1=1
+		<choose>
+			<when test="id != 0">
+				and c_id = #{id}
+			</when>
+		</choose>
+	</select>
+	
+</mapper>
