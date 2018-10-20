@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.learnMybatisXml.repository.CmUserRepository">
+	
+	<!-- sql -->
+	<select id="listCmUser" resultMap="CmUserMap">
+		select * from cm_user
+	</select>
+	<!-- return -->
+	<resultMap type="com.sun.learnMybatisXml.domain.CmUser" id="CmUserMap">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="pwd" column="pwd"/>
+		<result property="gender" column="gender"/>
+	</resultMap>
+	
+	<select id="getCmUser" parameterType="int" resultMap="GetCmUserMap">
+		select * from cm_user where id = #{id}
+	</select>
+	<resultMap type="com.sun.learnMybatisXml.domain.CmUser" id="GetCmUserMap">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="pwd" column="pwd"/>
+		<result property="gender" column="gender"/>
+	</resultMap>
+	
+	<!-- delete -->
+	<delete id="deleteCmUser" parameterType="int">
+		delete from cm_user where id = ${id}
+	</delete>
+	
+	<!-- insert -->
+	<insert id="insertCmUser" parameterType="com.sun.learnMybatisXml.domain.CmUser" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `learning`.`cm_user` (`name`, `pwd`, `gender`) VALUES (#{name},#{pwd},#{gender});
+	</insert>
+	
+	<!-- update -->
+	<update id="updateCmUser" parameterType="com.sun.learnMybatisXml.domain.CmUser" useGeneratedKeys="true" keyProperty="id">
+		UPDATE cm_user
+ 		<trim prefix="set" suffixOverrides=",">
+  			<if test="name!=null">name=#{name},</if>
+  			<if test="pwd!=null">pwd=#{pwd},</if>
+  			<if test="gender!=null">gender=#{gender},</if>
+ 		</trim>
+ 		WHERE id=#{id}
+	</update>
+	
+	
+</mapper>

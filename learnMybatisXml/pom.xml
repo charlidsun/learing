@@ -52,6 +52,12 @@
 			<artifactId>pagehelper</artifactId>
 			<version>${mybatis-pagehelper.version}</version>
 		</dependency>
+		<!-- redis -->
+		<dependency>  
+    	   <groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-redis</artifactId>
+    		<version>1.4.3.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
