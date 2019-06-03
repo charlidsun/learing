@@ -1,0 +1,3 @@
+https://www.runoob.com/java/java-sending-email.html
+https://blog.csdn.net/blinking_star/article/details/77187370
+https://www.hmailserver.org/
